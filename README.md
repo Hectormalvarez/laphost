@@ -1,19 +1,39 @@
 # laphost
 
 ## Overview
-**laphost** is a minimal Ansible configuration for provisioning bare-metal laptop hardware as a headless, mobile testing and development host. 
 
-## Scope
-*   **Hardware:** Enforce systemd Clamshell Mode (`HandleLidSwitch=ignore`).
-*   **Access:** Configure passwordless `sudo` and ingest GitHub SSH keys for the primary user. Disable root login and password authentication.
-*   **Runtimes:** Install Docker Engine, QEMU, KVM, and Libvirt.
-*   **Permissions:** Append primary user to `docker`, `kvm`, and `libvirt` groups.
+**laphost** is a modular Ansible configuration for provisioning bare-metal laptop hardware as a headless, mobile development host.
 
-## Execution
+## Architecture
+
+The project utilizes a role-based structure to enforce system state:
+
+- **access:** Establishes passwordless `sudo` for the primary user.
+- **common:** Installs baseline utilities and configures mDNS (`avahi-daemon`) for `.local` resolution.
+- **headless:** Enforce systemd Clamshell Mode (`HandleLidSwitch=ignore`) to prevent sleep on lid closure.
+
+## Prerequisites
+
 1. Flash Ubuntu Server to target hardware.
 2. Supply Wi-Fi credentials during OS installation.
-3. Identify target DHCP IP address.
-4. Execute state enforcement:
-   ```bash
-   ansible-playbook playbook.yml -i <TARGET_IP>, -u <USER> --ask-become-pass
-   ```
+3. Establish initial SSH connectivity.
+
+## Execution
+
+### First-Run (Provisioning Access)
+
+Execute this command initially to establish passwordless `sudo` permissions. This requires the remote user's password for privilege escalation.
+
+```bash
+ansible-playbook site.yml -e "target_address=<IP_OR_HOSTNAME> ansible_user=<USER>" --ask-become-pass
+
+```
+
+### Standard Execution (State Enforcement)
+
+Execute this command for all subsequent updates once the `access` role has been successfully applied.
+
+```bash
+ansible-playbook site.yml -e "target_address=<IP_OR_HOSTNAME> ansible_user=<USER>"
+
+```
