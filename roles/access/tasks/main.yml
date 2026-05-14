@@ -1,0 +1,10 @@
+---
+- name: Enable passwordless sudo for the primary user
+  ansible.builtin.copy:
+    content: |
+      {{ ansible_user }} ALL=(ALL) NOPASSWD: ALL
+    dest: "/etc/sudoers.d/{{ ansible_user }}"
+    owner: root
+    group: root
+    mode: '0440'
+    validate: /usr/sbin/visudo -cf %s
