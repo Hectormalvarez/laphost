@@ -1,0 +1,7 @@
+---
+- name: Mobile Host Configuration
+  hosts: vm_hosts
+  become: yes
+
+  roles:
+    - common
