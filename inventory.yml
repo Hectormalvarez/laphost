@@ -1,0 +1,6 @@
+all:
+  children:
+    vm_hosts:
+      hosts:
+        mobile_host:
+          ansible_host: "{{ target_address }}"
