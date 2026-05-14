@@ -1,0 +1,25 @@
+---
+- name: Install KVM, QEMU, and Libvirt components
+  ansible.builtin.apt:
+    name:
+      - qemu-system-x86
+      - libvirt-daemon-system
+      - libvirt-clients
+      - bridge-utils
+      - virtinst
+    state: present
+    update_cache: yes
+
+- name: Ensure libvirtd service is active and enabled
+  ansible.builtin.systemd:
+    name: libvirtd
+    state: started
+    enabled: yes
+
+- name: Append primary user to virtualization groups
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups:
+      - libvirt
+      - kvm
+    append: yes
