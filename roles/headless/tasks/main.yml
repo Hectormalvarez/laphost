@@ -1,0 +1,12 @@
+---
+- name: Enforce clamshell mode via logind.conf
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/logind.conf
+    regexp: '^#?{{ item.key }}='
+    line: '{{ item.key }}={{ item.value }}'
+    state: present
+  loop:
+    - { key: 'HandleLidSwitch', value: 'ignore' }
+    - { key: 'HandleLidSwitchExternalPower', value: 'ignore' }
+    - { key: 'HandleLidSwitchDocked', value: 'ignore' }
+  notify: Restart systemd-logind
