@@ -1,0 +1,34 @@
+---
+- name: Deploy hybrid Netplan configuration
+  ansible.builtin.copy:
+    dest: /etc/netplan/01-netcfg.yaml
+    owner: root
+    group: root
+    mode: '0600'
+    content: |
+      network:
+        version: 2
+        renderer: networkd
+        ethernets:
+          enp0s31f6:
+            dhcp4: no
+            optional: true
+        bridges:
+          br0:
+            interfaces: [enp0s31f6]
+            dhcp4: yes
+            dhcp4-overrides:
+              route-metric: 200
+            optional: true
+        wifis:
+          wlp0s20f3:
+            dhcp4: yes
+            dhcp4-overrides:
+              route-metric: 100
+            access-points:
+              "TaylorMadeTech.Net":
+                password: "{{ wifi_password }}"
+  notify: Apply netplan changes
+
+- name: Flush handlers to force network compilation immediately
+  ansible.builtin.meta: flush_handlers
