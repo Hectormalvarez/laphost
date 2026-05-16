@@ -1,10 +1,11 @@
 ---
 - name: Mobile Host Configuration
   hosts: vm_hosts
-  become: yes
+  become: true
 
   roles:
     - access
+    - network
     - common
     - headless
     - docker
