@@ -8,13 +8,13 @@
       - bridge-utils
       - virtinst
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Ensure libvirtd service is active and enabled
   ansible.builtin.systemd:
     name: libvirtd
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Append primary user to virtualization groups
   ansible.builtin.user:
@@ -22,4 +22,4 @@
     groups:
       - libvirt
       - kvm
-    append: yes
+    append: true

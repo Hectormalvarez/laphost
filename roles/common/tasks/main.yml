@@ -1,7 +1,7 @@
 ---
 - name: Update apt package manager cache
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 3600
 
 - name: Install baseline system utilities and mDNS daemon
@@ -15,5 +15,5 @@
 - name: Ensure mDNS service is active and persists across reboots
   ansible.builtin.systemd:
     name: avahi-daemon
-    enabled: yes
+    enabled: true
     state: started
