@@ -3,6 +3,7 @@
 ansible-vault-password
 inventory.ini
 .ansible_cache
+.ansible/
 
 # --- Terraform ---
 .terraform/
